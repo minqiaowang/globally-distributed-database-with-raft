@@ -16,7 +16,7 @@ This lab assumes you have already completed the following:
 
 - Setup environment to provision lab resource.
 
-## **Task 1:** Configure GSM Host
+## Task 1: Configure GSM Host
 
 1.   Connect to the GSM host.
 
