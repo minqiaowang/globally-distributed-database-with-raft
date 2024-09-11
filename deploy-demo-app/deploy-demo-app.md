@@ -195,7 +195,7 @@ This lab assumes you have already completed the following:
           67034        10985            0            0         1285
     ```
     
-3. Keep this app running
+3. Keep this app running.
 
    
 
@@ -211,99 +211,14 @@ This lab assumes you have already completed the following:
     [opc@gsmhost ~]$ 
     ```
     
-    Switch to oracle user.
     
-    ```
-    [opc@gsmhost ~]$ sudo su - oracle
-    Last login: Sun Aug 11 02:12:35 GMT 2024 on pts/6
-    [oracle@gsmhost ~]$ 
-    ```
     
-       
-    
-2. Connect to GDSCTL
-
-   ```
-   [oracle@gsmhost ~]$ gdsctl
-   GDSCTL: Version 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on Sun Aug 11 02:42:21 GMT 2024
-   
-   Copyright (c) 2011, 2024, Oracle.  All rights reserved.
-   
-   Welcome to GDSCTL, type "help" for information.
-   
-   Current GSM is set to SHARDDIRECTOR1
-   GDSCTL> 
-   ```
-   
-   
-   
-2. Show current RU
-
-   ```
-   GDSCTL> status ru
-   Replication units
-   ------------------------
-   Catalog connection is established
-   Database                      RU#  Role      Term Log Index Status       
-   --------                      ---  ----      ---- --------- ------       
-   sdb2_workshop_shard2          1    Follower  1    253648    Ok           
-   sdb2_workshop_shard2          2    Leader    2    256193    Ok           
-   sdb2_workshop_shard2          3    Follower  2    257854    Ok           
-   sdb2_workshop_shard2          4    Follower  1    258642    Ok           
-   sdb2_workshop_shard2          5    Leader    2    255395    Ok           
-   sdb2_workshop_shard2          6    Follower  2    257924    Ok           
-   sdb1_workshop_shard1          1    Leader    1    253648    Ok           
-   sdb1_workshop_shard1          2    Follower  2    256193    Ok           
-   sdb1_workshop_shard1          3    Follower  2    257854    Ok           
-   sdb1_workshop_shard1          4    Leader    1    258642    Ok           
-   sdb1_workshop_shard1          5    Follower  2    255395    Ok           
-   sdb1_workshop_shard1          6    Follower  2    257924    Ok           
-   sdb3_workshop_shard3          1    Follower  1    253648    Ok           
-   sdb3_workshop_shard3          2    Follower  2    256193    Ok           
-   sdb3_workshop_shard3          3    Leader    2    257854    Ok           
-   sdb3_workshop_shard3          4    Follower  1    258642    Ok           
-   sdb3_workshop_shard3          5    Follower  2    255395    Ok           
-   sdb3_workshop_shard3          6    Leader    2    257924    Ok  
-   ```
-   
-   
-   
-2. Show RU 1 status and related chunks
-
-   ```
-   GDSCTL> status ru -ru 1 -show_chunks
-   Chunks
-   ------------------------
-   RU#                           From      To        
-   ---                           ----      --        
-   1                             1         3         
-   
-   Replication units
-   ------------------------
-   Database                      RU#  Role      Term Log Index Apply LogIdx LWM LogIdx On-disk LogIdx Status       
-   --------                      ---  ----      ---- --------- ------------ ---------- -------------- ------       
-   sdb2_workshop_shard2          1    Follower  1    253647    253648       253647     253648         Ok           
-   sdb1_workshop_shard1          1    Leader    1    253647    0            0          253648         Ok           
-   sdb3_workshop_shard3          1    Follower  1    253647    253648       253647     253648         Ok           
-   ```
-   
-   
-   
-2. Exit the GDSCTL, and exit to **opc** user.
-
-   ```
-   GDSCTL> exit
-   [oracle@gsmhost ~]$ exit
-   [opc@gsmhost ~]$ 
-   ```
-   
-   
-   
-2. Now, connect to the shard host1 with **opc** user and switch to **oracle** user.
+2. Connect to the shard host1 with **opc** user and switch to **oracle** user.
 
    ```
    [opc@gsmhost ~]$ ssh -i labkey opc@shardhost1
    Last login: Tue Aug 13 02:44:40 2024 from 10.0.0.20
+   
    [opc@shardhost1 ~]$ sudo su - oracle
    Last login: Tue Aug 13 02:48:21 UTC 2024
    [oracle@shardhost1 ~]$ 
@@ -335,25 +250,30 @@ This lab assumes you have already completed the following:
    
    
    
-2. You can see the apps still running with some error
+2. You can see the apps still running with some error, but will resume in a short time.
 
    ```
    RO Queries | RW Queries | RO Failed  | RW Failed  | APS 
-        501580        88693            0            0         1258
-        504605        89248            0            0         1279
-        507215        89703            0            0         1123
-        509813        90146            0            0         1095
-        512664        90603            0            0         1223
-        515241        91092            0            0         1127
-        518779        91716            0            0         1542
-        522263        92357            0            0         1503
-        525993        92989            0            0         1604
-        529690        93641            0            0         1562
+         76350        13545            0            0         1162
+         79757        14108            0            0         1480
+         83362        14752            0            0         1532
+         83362        14753            0            0            1
+         85397        15082            3            2          854
+         88462        15643            3            2         1299
+         91509        16197            3            2         1309
+         94770        16765            3            2         1414
+         98182        17317            3            2         1478
+        101346        17922            3            2         1306
+        104541        18519            3            2         1347
+        108009        19083            3            2         1482
+        111148        19671            3            2         1347
+        113965        20175            3            2         1212
+        117152        20709            3            2         1366
    ```
    
    
    
-2. Keep App running. In the terminal 2, Exit to the gsmhost, connect to GDSCTL
+2. Keep the app running. In the terminal 2, Exit to the gsmhost, switch to oracle user and connect to GDSCTL.
 
    ```
    [oracle@gsmhost ~]$ gdsctl

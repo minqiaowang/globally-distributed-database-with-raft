@@ -22,7 +22,7 @@ This lab assumes you have already completed the following:
 
 Click on the link below to download the Resource Manager zip files you need to build your enviornment.
 
-- [gdd-raft-23ai-v3.zip](https://github.com/minqiaowang/globally-distributed-database-with-raft/raw/main/setup-environment/gdd-raft-23ai-v3.zip) - Packaged terraform resources creation script.
+- [gdd-raft-23ai-v3.zip](https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/gdd-raft-23ai-v3.zip) - Packaged terraform resources creation script.
 
 
 
@@ -30,11 +30,11 @@ Click on the link below to download the Resource Manager zip files you need to b
 
 1. Login to the Oracle Cloud Console, open the hamburger menu in the left hand corner. Choose **Resource Manager > Stacks**. Choose the **Compartment** that you want to use, click the  **Create Stack** button. *Note: If you are in a workshop, double check your region to ensure you are on the assigned region.*
 
-    ![image-20240808102445605](images/image-20240808102445605.png)
+    ![image-resmanager](images/image-resmanager.png)
 
     
 
-    ![image-20240808102607902](images/image-20240808102607902.png)
+    ![image-stack](images/image-stack.png)
 
 2. Check the **ZIP FILE**, Click the **Browse** link and select the setup zip file (`gdd-raft-23ai.zip`) that you downloaded. Click **Select** to upload the zip file.
 
@@ -45,15 +45,15 @@ Click on the link below to download the Resource Manager zip files you need to b
 
 3. Upload or Paste the content of the public key you create before to the `SSH_PUBLIC_KEY`,  and click **Next**.
 
-    ![image-20240808102752156](images/image-20240808102752156.png)
+    ![image-sshkey](images/image-sshkey.png)
 
 4. Click **Create**.
 
-    ![image-20240808102854026](images/image-20240808102854026.png)
+    ![image-review](images/image-review.png)
 
 5. Your stack has now been created!  Now to create your environment. 
 
-    ![image-20240808102942342](images/image-20240808102942342.png)
+    ![image-stack-detail](images/image-stack-detail.png)
 
 
 
@@ -63,21 +63,21 @@ When using Resource Manager to deploy an environment, execute a terraform  **App
 
 1. At the top of your page, click on **Stack Details**.  Click the button, **Terraform Actions** -> **Apply**. Click **Apply**. This takes about 15-20 minutes, please be patient.
 
-    ![image-20240808103053718](images/image-20240808103053718.png)
+    ![image-apply](images/image-apply.png)
 
-    ![image-20240808103413961](images/image-20240808103413961.png)
+    ![image-apply-confirm](images/image-apply-confirm.png)
 
-    ![image-20240808103452968](images/image-20240808103452968.png)
+    ![image-accepted](images/image-accepted.png)
 
-    ![image-20240808103535001](images/image-20240808103535001.png)
+    ![image-in-progress](images/image-in-progress.png)
 
-    ![image-20240808105450750](images/image-20240808105450750.png)
+    ![image-successed](images/image-successed.png)
 
     
 
 2. Once this job succeeds, you will get an apply complete notification from Terraform.  Click **Outputs**,  you can get the **public ip address** for the GSM host instance. (If you encouter with error, some base databases have been provisioned, others with error. You can click **Apply** again to provision the rest resources).
 
-    ![image-20240808105608259](images/image-20240808105608259.png)
+    ![image-output](images/image-output.png)
 
     
 

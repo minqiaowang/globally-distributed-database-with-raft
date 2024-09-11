@@ -44,7 +44,7 @@ This lab assumes you have already completed the following:
 2. Download the SQL scripts `create-sample-schema.sql`.
 
     ```
-    [oracle@gsmhost ~]$ wget https://github.com/minqiaowang/globally-distributed-database-with-raft/raw/main/create-sample-schema/create-sample-schema.sql
+    [oracle@gsmhost ~]$ wget https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/create-sample-schema.sql
     ```
 
    
