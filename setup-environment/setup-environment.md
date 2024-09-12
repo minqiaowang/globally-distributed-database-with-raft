@@ -36,10 +36,14 @@ Click on the link below to download the Resource Manager zip files you need to b
 
     ![image-stack](images/image-stack.png)
 
-2. Check the **ZIP FILE**, Click the **Browse** link and select the setup zip file (`gdd-raft-23ai.zip`) that you downloaded. Click **Select** to upload the zip file.
-
     
 
+2. Check the **ZIP FILE**, Click the **Browse** link and select the setup zip file (`gdd-raft-23ai.zip`) that you downloaded. Click **Select** to upload the zip file.
+
+    ![image-terraform-scripts](images/image-terraform-scripts.png)
+
+    
+    
     Accept all the defaults and click **Next**.
 
 
