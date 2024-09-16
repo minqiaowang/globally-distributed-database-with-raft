@@ -47,9 +47,13 @@ Click on the link below to download the Resource Manager zip files you need to b
     Accept all the defaults and click **Next**.
 
 
-3. Upload or Paste the content of the public key you create before to the `SSH_PUBLIC_KEY`,  and click **Next**.
+3. Upload or Paste the content of the public key you create before.
 
     ![image-sshkey](images/image-sshkey.png)
+
+4. Input the DB Unique Name Suffix, the default value is "workshop". You can input your own suffix to make sure the db unique name is different from other users when multiple users do the same workshop using the same tenant. Then click **Next**.
+
+    ![image-dbsuffix](images/image-dbsuffix.png)
 
 4. Click **Create**.
 
@@ -79,7 +83,19 @@ When using Resource Manager to deploy an environment, execute a terraform  **App
 
     
 
-2. Once this job succeeds, you will get an apply complete notification from Terraform.  Click **Outputs**,  you can get the **public ip address** for the GSM host instance. (If you encouter with error, some base databases have been provisioned, others with error. You can click **Apply** again to provision the rest resources).
+2. Once this job succeeds, you will get an apply complete notification from Terraform.  Click **Outputs**,  you can get the **public ip address** for the GSM host instance. 
+
+    (If you encouter with error message like:
+
+    ```
+    Error Message: work request did not succeed, workId: ocid1.coreservicesworkrequest.oc1.ap-seoul-1.abu...hmltq, entity: database, action: CREATED. Message: Create DB System operation failed. Refer to work request ID fe65f...t1f when opening a Service Request at My Oracle Support.
+    
+    Resource OCID: ocid1.dbsystem.oc1.ap-seoul-1.anu...twbq
+    
+    Suggestion: Please retry or contact support for help with service: Database Db System
+    ```
+
+    In this situation, some base databases have been provisioned, others with error. You can click **Apply** again in the stack details page to provision the rest resources).
 
     ![image-output](images/image-output.png)
 
@@ -87,7 +103,7 @@ When using Resource Manager to deploy an environment, execute a terraform  **App
 
 3. Write down the gsmhost public ip address. It's will be used in the next Tasks.
 
-4. Now, you have gotten the lab resources like the following:
+4. Now, you have gotten the lab resources like the following (**Note:** the DB Unique Name may different if you input the different suffix name when creating the stack).
 
     | Host       | Private IP | DB Name | DB Unique Name   | PDB Name |
     | ---------- | ---------- | ------- | ---------------- | -------- |
@@ -103,10 +119,10 @@ When using Resource Manager to deploy an environment, execute a terraform  **App
 
 ### MAC or Windows CYGWIN Emulator
 
-1.  Open up a terminal (MAC) or cygwin emulator as the opc user.  Enter yes when prompted.
+1.  Open up a terminal (MAC) or cygwin emulator connect the gsmhost instance as the opc user.  Enter yes when prompted.
 
     ````
-    ssh -i ~/.ssh/optionskey opc@<Your Compute Instance Public IP Address>
+    ssh -i ~/.ssh/optionskey opc@<Your GSM host Public IP Address>
     ````
 
 2. After successfully logging in, proceed to Step 5.
