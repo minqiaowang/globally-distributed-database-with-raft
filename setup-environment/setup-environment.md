@@ -125,7 +125,7 @@ When using Resource Manager to deploy an environment, execute a terraform  **App
     ssh -i ~/.ssh/optionskey opc@<Your GSM host Public IP Address>
     ````
 
-2. After successfully logging in, proceed to Step 5.
+    The output like this:
 
     ```
     ssh -i labkey opc@xxx.xxx.xxx.xxx

@@ -8,7 +8,11 @@ Estimated Lab Time: 60 minutes.
 
 ### Objectives
 
-In this lab, you will install the GSM Software in the gsmhost Compute Instance.
+In this lab, you will perform the following steps:
+
+-   Install the GSM Software in the gsmhost Compute Instance.
+-   Configure the Catalog DB and Shard DB.
+-   Deploy the GDD with RAFT replication.
 
 ### Prerequisites
 
@@ -21,7 +25,7 @@ This lab assumes you have already completed the following:
 1.   Connect to the GSM host.
 
      ```
-     $ ssh -i labkey opc@xxx.xxx.xxx.xxx
+     $ <copy>ssh -i labkey opc@xxx.xxx.xxx.xxx</copy>
      Activate the web console with: systemctl enable --now cockpit.socket
      
      Last login: Thu Aug  8 02:59:55 2024 from xxx.xxx.xxx.xxx
@@ -33,8 +37,8 @@ This lab assumes you have already completed the following:
 2.   Stop and disable the firewall.
 
      ```
-     [opc@gsmhost ~]$ sudo systemctl stop firewalld
-     [opc@gsmhost ~]$ sudo systemctl disable firewalld
+     [opc@gsmhost ~]$ <copy>sudo systemctl stop firewalld</copy>
+     [opc@gsmhost ~]$ <copy>sudo systemctl disable firewalld</copy>
      ```
 
      
@@ -42,17 +46,17 @@ This lab assumes you have already completed the following:
 3.   Edit the hosts file
 
      ```
-     [opc@gsmhost ~]$ sudo vi /etc/hosts
+     [opc@gsmhost ~]$ <copy>sudo vi /etc/hosts</copy>
      ```
 
      Copy an paste the following entries into the host file
 
      ```
-     10.0.0.20 gsmhost.subnet1.primaryvcn.oraclevcn.com gsmhost
+     <copy>10.0.0.20 gsmhost.subnet1.primaryvcn.oraclevcn.com gsmhost
      10.0.0.10 catahost.subnet1.primaryvcn.oraclevcn.com catahost
      10.0.0.11 shardhost1.subnet1.primaryvcn.oraclevcn.com shardhost1
      10.0.0.12 shardhost2.subnet1.primaryvcn.oraclevcn.com shardhost2
-     10.0.0.13 shardhost3.subnet1.primaryvcn.oraclevcn.com shardhost3
+     10.0.0.13 shardhost3.subnet1.primaryvcn.oraclevcn.com shardhost3</copy>
      ```
 
      
@@ -60,7 +64,7 @@ This lab assumes you have already completed the following:
 3.   Install the Oracle Database Preinstallation RPM.
 
      ```
-     [opc@gsmhost ~]$ sudo dnf -y install oracle-database-preinstall-23ai
+     [opc@gsmhost ~]$ <copy>sudo dnf -y install oracle-database-preinstall-23ai</copy>
      ```
 
      
@@ -68,8 +72,8 @@ This lab assumes you have already completed the following:
 4.   Create a directory for oracle installation
 
      ```
-     [opc@gsmhost ~]$ sudo mkdir /u01
-     [opc@gsmhost ~]$ sudo chmod 777 /u01
+     [opc@gsmhost ~]$ <copy>sudo mkdir /u01</copy>
+     [opc@gsmhost ~]$ <copy>sudo chmod 777 /u01</copy>
      ```
 
      
@@ -77,7 +81,7 @@ This lab assumes you have already completed the following:
 5.   Sudo to the oracle user
 
      ```
-     [opc@gsmhost ~]$ sudo su - oracle
+     [opc@gsmhost ~]$ <copy>sudo su - oracle</copy>
      ```
 
      
@@ -85,7 +89,7 @@ This lab assumes you have already completed the following:
 6.   Download the DB23ai GSM installation file from the [Oracle Database 23ai Download for Linux x86-64 Page](https://www.oracle.com/database/technologies/oracle23ai-linux-downloads.html), or using the following url:
 
      ```
-     wget https://objectstorage.ap-seoul-1.oraclecloud.com/p/BcWt-6XN2rvE98lV73Hux8jkVqK2iwjiQY-Yxc0d9yBGvdqUBirp-qCCJhlCCC73/n/oraclepartnersas/b/DB19c-GSM/o/LINUX.X64_235000_gsm.zip
+     <copy>wget https://objectstorage.ap-seoul-1.oraclecloud.com/p/BcWt-6XN2rvE98lV73Hux8jkVqK2iwjiQY-Yxc0d9yBGvdqUBirp-qCCJhlCCC73/n/oraclepartnersas/b/DB19c-GSM/o/LINUX.X64_235000_gsm.zip</copy>
      ```
 
      
@@ -93,7 +97,7 @@ This lab assumes you have already completed the following:
 7.   Unzip the file.
 
      ```
-     [oracle@gsmhost ~]$ unzip LINUX.X64_235000_gsm.zip
+     [oracle@gsmhost ~]$ <copy>unzip LINUX.X64_235000_gsm.zip</copy>
      ```
 
      
@@ -141,7 +145,7 @@ This lab assumes you have already completed the following:
 9.   Create the gsm home directory
 
      ```
-     [oracle@gsmhost ~]$ mkdir -p /u01/app/oracle/product/23.0.0/gsmhome_1
+     [oracle@gsmhost ~]$ <copy>mkdir -p /u01/app/oracle/product/23.0.0/gsmhome_1</copy>
      ```
      
      
@@ -149,7 +153,7 @@ This lab assumes you have already completed the following:
 9.    Install GSM
 
      ```
-     [oracle@gsmhost ~]$ ./gsm/runInstaller -silent -responseFile /home/oracle/gsm/response/gsm_install.rsp -showProgress
+     [oracle@gsmhost ~]$ <copy>./gsm/runInstaller -silent -responseFile /home/oracle/gsm/response/gsm_install.rsp -showProgress</copy>
      ```
      
      Output like this:
@@ -225,8 +229,8 @@ This lab assumes you have already completed the following:
 10.   Click **Enter** when finish. Then switch to **root** user and run the scripts
 
       ```
-      [root@gsmhost ~]# /u01/app/oraInventory/orainstRoot.sh
-      [root@gsmhost ~]# /u01/app/oracle/product/23.0.0/gsmhome_1/root.sh
+      [root@gsmhost ~]# <copy>/u01/app/oraInventory/orainstRoot.sh</copy>
+      [root@gsmhost ~]# <copy>/u01/app/oracle/product/23.0.0/gsmhome_1/root.sh</copy>
       ```
 
       
@@ -234,10 +238,10 @@ This lab assumes you have already completed the following:
 11.   Switch back to **oracle** user, edit the `.bash_profile`, add the following environment variables.
 
       ```
-      export ORACLE_BASE=/u01/app/oracle
+      <copy>export ORACLE_BASE=/u01/app/oracle
       export ORACLE_HOME=/u01/app/oracle/product/23.0.0/gsmhome_1
       export LD_LIBRARY_PATH=$ORACLE_HOME/lib
-      export PATH=$ORACLE_HOME/bin:$PATH
+      export PATH=$ORACLE_HOME/bin:$PATH</copy>
       ```
 
       
@@ -245,7 +249,7 @@ This lab assumes you have already completed the following:
 12.   Active the variables.
 
       ```
-      [oracle@gsmhost ~]$ source .bash_profile
+      [oracle@gsmhost ~]$ <copy>source .bash_profile</copy>
       ```
 
       
@@ -257,7 +261,7 @@ This lab assumes you have already completed the following:
 1.   Upload your private key to the gsmhost.
 
      ```
-     scp -i <your_private_key> <your_private_key> opc@<gsmhost_public_ip>:~
+     <copy>scp -i <your_private_key> <your_private_key> opc@<gsmhost_public_ip>:~</copy>
      ```
 
      
@@ -265,7 +269,7 @@ This lab assumes you have already completed the following:
 2.   Connect to the gsmhost first
 
      ```
-     ssh -i <your_private_key> opc@<gsmhost_public_ip>
+     <copy>ssh -i <your_private_key> opc@<gsmhost_public_ip></copy>
      ```
 
      
@@ -273,7 +277,7 @@ This lab assumes you have already completed the following:
 3.   from **opc** user, connec to the **catahost**, 
 
      ```
-     [opc@gsmhost ~]$ ssh -i <your_private_key> opc@catahost
+     [opc@gsmhost ~]$ <copy>ssh -i <your_private_key> opc@catahost</copy>
      The authenticity of host 'catahost (10.0.0.10)' can't be established.
      ECDSA key fingerprint is SHA256:3Bebd2KRlGZHVp8fxOLOodVa4UyT7wdegMIuC/rpiFo.
      Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
@@ -287,17 +291,17 @@ This lab assumes you have already completed the following:
 4.   Edit the hosts file
 
      ```
-     [opc@catahost ~]$ sudo vi /etc/hosts
+     [opc@catahost ~]$ <copy>sudo vi /etc/hosts</copy>
      ```
 
      Copy an paste the following entries into the host file
 
      ```
-     10.0.0.20 gsmhost.subnet1.primaryvcn.oraclevcn.com gsmhost
+     <copy>10.0.0.20 gsmhost.subnet1.primaryvcn.oraclevcn.com gsmhost
      10.0.0.10 catahost.subnet1.primaryvcn.oraclevcn.com catahost
      10.0.0.11 shardhost1.subnet1.primaryvcn.oraclevcn.com shardhost1
      10.0.0.12 shardhost2.subnet1.primaryvcn.oraclevcn.com shardhost2
-     10.0.0.13 shardhost3.subnet1.primaryvcn.oraclevcn.com shardhost3
+     10.0.0.13 shardhost3.subnet1.primaryvcn.oraclevcn.com shardhost3</copy>
      ```
 
      
@@ -305,7 +309,7 @@ This lab assumes you have already completed the following:
 5.   Then switch to **oracle** user
 
      ```
-     [opc@catahost ~]$ sudo su - oracle
+     [opc@catahost ~]$ <copy>sudo su - oracle</copy>
      Last login: Thu Aug  8 05:35:06 UTC 2024
      [oracle@catahost ~]$
      ```
@@ -315,7 +319,7 @@ This lab assumes you have already completed the following:
 6.   Connect to oracle database as sysdba
 
      ```
-     [oracle@catahost ~]$ sqlplus / as sysdba
+     [oracle@catahost ~]$ <copy>sqlplus / as sysdba</copy>
      
      SQL*Plus: Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on Thu Aug 8 05:30:55 2024
      Version 23.5.0.24.07
@@ -335,7 +339,7 @@ This lab assumes you have already completed the following:
 7.   Initialization parameter adjustments for CDB
 
      ```
-     alter system set open_links=16 scope=spfile;
+     <copy>alter system set open_links=16 scope=spfile;
      alter system set open_links_per_instance=16 scope=spfile;
      alter system set db_files=1024 scope=spfile;
      alter system set standby_file_management=auto scope=both;
@@ -343,7 +347,7 @@ This lab assumes you have already completed the following:
      alter user gsmcatuser identified by WelcomePTS_2024#;
      alter database flashback on;
      alter system set global_names=false scope=both;
-     alter system set db_domain='' scope=spfile;
+     alter system set db_domain='' scope=spfile;</copy>
      ```
 
      
@@ -351,8 +355,8 @@ This lab assumes you have already completed the following:
 8.   Restart database to activate the parameters.
 
      ```
-     shutdown immediate;
-     startup;
+     <copy>shutdown immediate;
+     startup;</copy>
      ```
      
      
@@ -360,10 +364,10 @@ This lab assumes you have already completed the following:
 8.   PDB configuration settings
 
      ```
-     alter session set container=catapdb;
+     <copy>alter session set container=catapdb;
      alter user gsmcatuser account unlock;
      create user mysdbadmin identified by WelcomePTS_2024#;
-     grant gsmadmin_role to mysdbadmin;
+     grant gsmadmin_role to mysdbadmin;</copy>
      ```
 
      
@@ -377,7 +381,7 @@ This lab assumes you have already completed the following:
 1.   From opc user on gsmhost, connect to the shardhost1(shardhost2, shardhost3)
 
      ```
-     [opc@gsmhost ~]$ ssh -i <your_private_key> opc@shardhost1
+     [opc@gsmhost ~]$ <copy>ssh -i <your_private_key> opc@shardhost1</copy>
      The authenticity of host 'shardhost1 (10.0.0.11)' can't be established.
      ECDSA key fingerprint is SHA256:lTvAqA49V0GXl1zCmhNbL6zAkMn+dJmIgUUZevrx6+Q.
      Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
@@ -393,17 +397,17 @@ This lab assumes you have already completed the following:
 2.   Edit the hosts file
 
      ```
-     [opc@shardhost1 ~]$ sudo vi /etc/hosts
+     [opc@shardhost1 ~]$ <copy>sudo vi /etc/hosts</copy>
      ```
 
      Copy an paste the following entries into the host file
 
      ```
-     10.0.0.20 gsmhost.subnet1.primaryvcn.oraclevcn.com gsmhost
+     <copy>10.0.0.20 gsmhost.subnet1.primaryvcn.oraclevcn.com gsmhost
      10.0.0.10 catahost.subnet1.primaryvcn.oraclevcn.com catahost
      10.0.0.11 shardhost1.subnet1.primaryvcn.oraclevcn.com shardhost1
      10.0.0.12 shardhost2.subnet1.primaryvcn.oraclevcn.com shardhost2
-     10.0.0.13 shardhost3.subnet1.primaryvcn.oraclevcn.com shardhost3
+     10.0.0.13 shardhost3.subnet1.primaryvcn.oraclevcn.com shardhost3</copy>
      ```
 
      
@@ -411,7 +415,7 @@ This lab assumes you have already completed the following:
 3.   Switch to oracle user
 
      ```
-     [opc@shardhost1 ~]$ sudo su - oracle
+     [opc@shardhost1 ~]$ <copy>sudo su - oracle</copy>
      Last login: Thu Aug  8 05:54:07 UTC 2024
      [oracle@shardhost1 ~]$ 
      ```
@@ -421,7 +425,7 @@ This lab assumes you have already completed the following:
 4.   Connect to oracle database as sysdba
 
      ```
-     [oracle@shardhost1 ~]$ sqlplus / as sysdba
+     [oracle@shardhost1 ~]$ <copy>sqlplus / as sysdba</copy>
      
      SQL*Plus: Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on Thu Aug 8 05:56:04 2024
      Version 23.5.0.24.07
@@ -441,7 +445,7 @@ This lab assumes you have already completed the following:
 5.   Initialization parameters adjustment for CDB
 
      ```
-     alter system set open_links=16 scope=spfile;
+     <copy>alter system set open_links=16 scope=spfile;
      alter system set open_links_per_instance=16 scope=spfile;
      alter system set db_files=1024 scope=spfile;
      alter system set standby_file_management=auto scope=both;
@@ -454,7 +458,7 @@ This lab assumes you have already completed the following:
      alter user gsmuser identified by WelcomePTS_2024#;
      alter database flashback on;
      alter system set global_names=false scope=both;
-     alter system set db_domain='' scope=spfile;
+     alter system set db_domain='' scope=spfile;</copy>
      ```
 
      
@@ -462,8 +466,8 @@ This lab assumes you have already completed the following:
 6.   Restart database to activate the parameters.
 
      ```
-     shutdown immediate;
-     startup;
+     <copy>shutdown immediate;
+     startup;</copy>
      ```
      
      
@@ -471,7 +475,7 @@ This lab assumes you have already completed the following:
 6.   Switch to shard pdb(**Note**: the pdb name is different in each shard)
 
      ```
-     alter session set container=shard1;
+     <copy>alter session set container=shard1;</copy>
      ```
      
      
@@ -479,9 +483,9 @@ This lab assumes you have already completed the following:
 7.   Unlock and grant privileges to gsm user  for PDB.
 
      ```
-     alter user gsmuser account unlock;
+     <copy>alter user gsmuser account unlock;
      grant SYSDG, SYSBACKUP to gsmuser;
-     grant read, write on directory DATA_PUMP_DIR to gsmadmin_internal;
+     grant read, write on directory DATA_PUMP_DIR to gsmadmin_internal;</copy>
      ```
      
      
@@ -489,8 +493,8 @@ This lab assumes you have already completed the following:
 7.   Validate shard in the pub, make sure it does not return any errors.
 
      ```
-     set serveroutput on
-     exec DBMS_GSM_FIX.VALIDATESHARD;
+     <copy>set serveroutput on
+     exec DBMS_GSM_FIX.VALIDATESHARD;</copy>
      ```
 
      output like the followiing, you can ignore the dg_broker_start error and the db_file_name_convert warning.
@@ -540,7 +544,7 @@ This lab assumes you have already completed the following:
 1.   Back to the gsmhost **opc** user and switch to **oracle** user
 
      ```
-     [opc@gsmhost ~]$ sudo su - oracle
+     [opc@gsmhost ~]$ <copy>sudo su - oracle</copy>
      Last login: Thu Aug  8 06:21:24 GMT 2024 on pts/0
      [oracle@gsmhost ~]$
      ```
@@ -550,7 +554,7 @@ This lab assumes you have already completed the following:
 2.   Start gdsctl
 
      ```
-     [oracle@gsmhost ~]$ gdsctl
+     [oracle@gsmhost ~]$ <copy>gdsctl</copy>
      GDSCTL: Version 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on Thu Aug 08 06:27:57 GMT 2024
      
      Copyright (c) 2011, 2024, Oracle.  All rights reserved.
@@ -567,7 +571,7 @@ This lab assumes you have already completed the following:
 3.   Create shard catalog, the `-repl NATIVE` for native RAFT replication.
 
      ```
-     create shardcatalog -database catahost:1521/catapdb -user mysdbadmin/WelcomePTS_2024# -repl native -repfactor 3 -chunks 18
+     <copy>create shardcatalog -database catahost:1521/catapdb -user mysdbadmin/WelcomePTS_2024# -repl native -repfactor 3 -chunks 18</copy>
      ```
 
      
@@ -575,7 +579,7 @@ This lab assumes you have already completed the following:
 4.   Connect to catalog database:
 
      ```
-     connect mysdbadmin/WelcomePTS_2024#@catahost:1521/catapdb
+     <copy>connect mysdbadmin/WelcomePTS_2024#@catahost:1521/catapdb</copy>
      ```
 
      
@@ -583,7 +587,7 @@ This lab assumes you have already completed the following:
 5.   Add GSM named sharddirector1
 
      ```
-     add gsm -gsm sharddirector1 -catalog catahost:1521/catapdb -pwd WelcomePTS_2024#
+     <copy>add gsm -gsm sharddirector1 -catalog catahost:1521/catapdb -pwd WelcomePTS_2024#</copy>
      ```
 
      
@@ -591,8 +595,8 @@ This lab assumes you have already completed the following:
 6.   Start GSM and set default gsm.
 
      ```
-     start gsm -gsm sharddirector1
-     status gsm -gsm sharddirector1
+     <copy>start gsm -gsm sharddirector1
+     status gsm -gsm sharddirector1</copy>
      ```
      
      ouput like this：
@@ -628,13 +632,13 @@ This lab assumes you have already completed the following:
 7.   Add invited nodes
 
      ```
-     add invitednode catahost
+     <copy>add invitednode catahost
      add invitednode shardhost1
      add invitednode shardhost2
      add invitednode shardhost3
      add invitednode shardhost1.subnet1.primaryvcn.oraclevcn.com
      add invitednode shardhost2.subnet1.primaryvcn.oraclevcn.com
-     add invitednode shardhost3.subnet1.primaryvcn.oraclevcn.com
+     add invitednode shardhost3.subnet1.primaryvcn.oraclevcn.com</copy>
      ```
 
      
@@ -642,7 +646,7 @@ This lab assumes you have already completed the following:
 8.   List invited nodes
 
      ```
-     config vncr
+     <copy>config vncr</copy>
      ```
 
      The output like this:
@@ -670,12 +674,12 @@ This lab assumes you have already completed the following:
 
      
 
-9.   Add the 3 CDBs which shard belong to
+9.   Add the 3 CDBs which shard belong to.
 
      ```
-     add cdb -connect shardhost1:1521/sdb1_workshop -pwd WelcomePTS_2024#
+     <copy>add cdb -connect shardhost1:1521/sdb1_workshop -pwd WelcomePTS_2024#
      add cdb -connect shardhost2:1521/sdb2_workshop -pwd WelcomePTS_2024#
-     add cdb -connect shardhost3:1521/sdb3_workshop -pwd WelcomePTS_2024#
+     add cdb -connect shardhost3:1521/sdb3_workshop -pwd WelcomePTS_2024#</copy>
      ```
 
      The output like this:
@@ -697,9 +701,9 @@ This lab assumes you have already completed the following:
 10.   Add the 3 shard pdbs
 
       ```
-      add shard -connect shardhost1:1521/shard1 -pwd WelcomePTS_2024# -cdb sdb1_workshop
+      <copy>add shard -connect shardhost1:1521/shard1 -pwd WelcomePTS_2024# -cdb sdb1_workshop
       add shard -connect shardhost2:1521/shard2 -pwd WelcomePTS_2024# -cdb sdb2_workshop
-      add shard -connect shardhost3:1521/shard3 -pwd WelcomePTS_2024# -cdb sdb3_workshop
+      add shard -connect shardhost3:1521/shard3 -pwd WelcomePTS_2024# -cdb sdb3_workshop</copy>
       ```
 
       The output like this:
@@ -737,7 +741,7 @@ This lab assumes you have already completed the following:
 12.   Check the shard configure
 
       ```
-      config shard
+      <copy>config shard</copy>
       ```
 
       The output like this:
@@ -761,7 +765,7 @@ This lab assumes you have already completed the following:
 13.   Deploy the shard. You can check the log in this directory if there are some problems: `$ORACLE_BASE/diag/gsm/gsmhost/sharddirector1/trace`
 
       ```
-      deploy
+      <copy>deploy</copy>
       ```
 
       The output like this:
@@ -778,7 +782,7 @@ This lab assumes you have already completed the following:
 13.   Check the shard status
 
       ```
-      GDSCTL> config shard
+      GDSCTL> <copy>config shard</copy>
       Catalog connection is established
       Name                Shard Group         Status    State       Region    Availability 
       ----                -----------         ------    -----       ------    ------------ 
@@ -797,7 +801,7 @@ This lab assumes you have already completed the following:
 14.   Check the status of RU. You can see there are 6 RUs, 1 Leader and 2 Followers for each RU.
 
       ```
-      GDSCTL> status ru
+      GDSCTL> <copy>status ru</copy>
       Replication units
       ------------------------
       Database                      RU#  Role      Term Log Index Status       
@@ -827,8 +831,8 @@ This lab assumes you have already completed the following:
 15.   Create Global Services
 
       ```
-      add service -service oltp_ro_svc -preferred_all
-      add service -service oltp_rw_svc -preferred_all
+      <copy>add service -service oltp_ro_svc -preferred_all
+      add service -service oltp_rw_svc -preferred_all</copy>
       ```
 
       
@@ -836,8 +840,8 @@ This lab assumes you have already completed the following:
 16.   Start services
 
       ```
-      start service -service oltp_ro_svc
-      start service -service oltp_rw_svc
+      <copy>start service -service oltp_ro_svc
+      start service -service oltp_rw_svc</copy>
       ```
 
       
@@ -845,7 +849,7 @@ This lab assumes you have already completed the following:
 17.   Check the status of the services
 
       ```
-      config service
+      <copy>config service</copy>
       ```
 
       The result like this:
@@ -863,7 +867,7 @@ This lab assumes you have already completed the following:
 18.   Exit to the **oracle** user, check the status of the listener.
 
       ```
-      [oracle@gsmhost ~]$ lsnrctl status sharddirector1
+      [oracle@gsmhost ~]$ <copy>lsnrctl status sharddirector1</copy>
       
       LSNRCTL for Linux: Version 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on 10-AUG-2024 13:49:59
       

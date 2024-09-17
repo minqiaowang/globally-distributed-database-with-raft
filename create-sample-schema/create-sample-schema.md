@@ -24,7 +24,7 @@ This lab assumes you have already completed the following:
 1. Login to the gsm host using the public ip address.
 
     ```
-    $ ssh -i labkey opc@<gsmhost_public_ip>
+    $ <copy>ssh -i labkey opc@<gsmhost_public_ip></copy>
     Last login: Sun Nov 29 01:26:28 2020 from 59.66.120.23
     -bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
     
@@ -34,7 +34,7 @@ This lab assumes you have already completed the following:
     Switch to oracle user.
     
     ```
-    [opc@gsmhost ~]$ sudo su - oracle
+    [opc@gsmhost ~]$ <copy>sudo su - oracle</copy>
     Last login: Sat Aug 10 23:59:23 GMT 2024 on pts/0
     [oracle@gsmhost ~]$ 
     ```
@@ -44,7 +44,7 @@ This lab assumes you have already completed the following:
 2. Download the SQL scripts `create-sample-schema.sql`.
 
     ```
-    [oracle@gsmhost ~]$ wget https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/create-sample-schema.sql
+    [oracle@gsmhost ~]$ <copy>wget https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/create-sample-schema.sql</copy>
     ```
 
    
@@ -52,7 +52,7 @@ This lab assumes you have already completed the following:
 3. View the sql scripts file. This scirpt will create a sample schema `app_schema`, then create a sharded table family `Customers->Orders->LineItems` sharded by `CustId`, and a duplicate table `Products`. Make sure the connect string is correct.
 
     ```
-    [oracle@gsmhost ~]$ cat create-sample-schema.sql 
+    [oracle@gsmhost ~]$ <copy>cat create-sample-schema.sql</copy>
     set echo on 
     set termout on
     set time on
@@ -188,7 +188,7 @@ This lab assumes you have already completed the following:
 4. Connect to SQLPLUS.
 
     ```
-    [oracle@gsmhost ~]$ sqlplus /nolog
+    [oracle@gsmhost ~]$ <copy>sqlplus /nolog</copy>
     
     SQL*Plus: Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on Sun Aug 11 00:13:46 2024
     Version 23.5.0.24.07
@@ -203,7 +203,7 @@ This lab assumes you have already completed the following:
 5. Run the sql script.
 
     ```
-    SQL> @create-sample-schema.sql
+    SQL> <copy>@create-sample-schema.sql</copy>
     ```
     
     The output like the following
@@ -414,7 +414,7 @@ This lab assumes you have already completed the following:
 6. The shard sample demo schema is created. Exit the sqlplus.
 
     ```
-    SQL> exit
+    SQL> <copy>exit</copy>
     Disconnected from Oracle Database 23ai EE Extreme Perf Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
     Version 23.5.0.24.07
     [oracle@gsmhost ~]$ 
@@ -427,7 +427,7 @@ This lab assumes you have already completed the following:
 1. In the gsm host work with **oracle** user, run GDSCTL command.
 
     ```
-    [oracle@gsmhost ~]$ gdsctl
+    [oracle@gsmhost ~]$ <copy>gdsctl</copy>
     GDSCTL: Version 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on Sun Aug 11 00:20:37 GMT 2024
     
     Copyright (c) 2011, 2024, Oracle.  All rights reserved.
@@ -443,7 +443,7 @@ This lab assumes you have already completed the following:
 2. Run the following commands to observe that there are no failures during the creation of tablespaces.
 
     ```
-    GDSCTL> show ddl
+    GDSCTL> <copy>show ddl</copy>
     Catalog connection is established
     id      DDL Text                                 Failed shards 
     --      --------                                 ------------- 
@@ -464,7 +464,7 @@ This lab assumes you have already completed the following:
 3. Run the config commands as shown below for each of the shards(`sdb1_workshop_shard1, sdb2_workshop_shard2, sdb3_workshop_shard3`) and verify if there are any DDL error. 
 
     ```
-    GDSCTL> config shard -shard sdb1_workshop_shard1
+    GDSCTL> <copy>config shard -shard sdb1_workshop_shard1</copy>
     
     Name: sdb1_workshop_shard1
     Shard Group: shardspaceora_regionora
@@ -498,7 +498,7 @@ This lab assumes you have already completed the following:
 4. Exit GDSCTL.
 
     ```
-    GDSCTL> exit
+    GDSCTL> <copy>exit</copy>
     [oracle@gsmhost ~]$ 
     ```
 
@@ -507,7 +507,7 @@ This lab assumes you have already completed the following:
 6. Connect to the shard1 database.
 
     ```
-    [oracle@gsmhost ~]$ sqlplus sys/WelcomePTS_2024#@shardhost1:1521/shard1 as sysdba
+    [oracle@gsmhost ~]$ <copy>sqlplus sys/WelcomePTS_2024#@shardhost1:1521/shard1 as sysdba</copy>
     
     SQL*Plus: Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on Sun Aug 11 00:27:19 2024
     Version 23.5.0.24.07
@@ -527,7 +527,7 @@ This lab assumes you have already completed the following:
 7. Check the created tablespace set. There are 18 tablespaces set for chunks.
 
     ```
-    SQL> select TABLESPACE_NAME, BYTES/1024/1024 MB from sys.dba_data_files order by tablespace_name;
+    SQL> <copy>select TABLESPACE_NAME, BYTES/1024/1024 MB from sys.dba_data_files order by tablespace_name;</copy>
     
     TABLESPACE_NAME 		       MB
     ------------------------------ ----------
@@ -570,11 +570,11 @@ This lab assumes you have already completed the following:
 8. Verify that the chunks and chunk tablespaces are created. Each sharded table have 18 partitions.
 
     ```
-    SQL> set linesize 140
-    SQL> column table_name format a20
-    SQL> column tablespace_name format a20
-    SQL> column partition_name format a20
-    SQL> select table_name, partition_name, tablespace_name from dba_tab_partitions where tablespace_name like 'C%TSP_SET_1' order by tablespace_name;
+    SQL> <copy>set linesize 140</copy>
+    SQL> <copy>column table_name format a20</copy>
+    SQL> <copy>column tablespace_name format a20</copy>
+    SQL> <copy>column partition_name format a20</copy>
+    SQL> <copy>select table_name, partition_name, tablespace_name from dba_tab_partitions where tablespace_name like 'C%TSP_SET_1' order by tablespace_name;</copy>
     
     TABLE_NAME	     PARTITION_NAME	  TABLESPACE_NAME
     -------------------- -------------------- --------------------
@@ -653,7 +653,7 @@ This lab assumes you have already completed the following:
 10. Connect to the catalog database using your own sys user password..
 
     ```
-    SQL> connect sys/WelcomePTS_2024#@catahost:1521/catapdb as sysdba
+    SQL> <copy>connect sys/WelcomePTS_2024#@catahost:1521/catapdb as sysdba</copy>
     Connected.
     SQL> 
     ```
@@ -663,8 +663,8 @@ This lab assumes you have already completed the following:
 11.  Query the `gsmadmin_internal.chunk_loc` table to observe that the chunks replicated in the three shard.
 
      ```
-     SQL> column shard format a40
-     SQL> select a.name Shard,count( b.chunk_number) Number_of_Chunks from gsmadmin_internal.database a, gsmadmin_internal.chunk_loc b where a.database_num=b.database_num group by a.name;
+     SQL> <copy>column shard format a40</copy>
+     SQL> <copy>select a.name Shard,count( b.chunk_number) Number_of_Chunks from gsmadmin_internal.database a, gsmadmin_internal.chunk_loc b where a.database_num=b.database_num group by a.name;</copy>
      
      SHARD					 NUMBER_OF_CHUNKS
      ---------------------------------------- ----------------
@@ -681,11 +681,11 @@ This lab assumes you have already completed the following:
 1.   Connect to the gsm host and switch to **oracle** user
 
      ```
-     $ ssh -i labkey opc@<gsmhost_public_ip>
+     $ <copy>ssh -i labkey opc@<gsmhost_public_ip></copy>
      Last login: Sun Nov 29 01:26:28 2020 from 59.66.120.23
      -bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
      
-     [opc@gsmhost ~]$ sudo su - oracle
+     [opc@gsmhost ~]$ <copy>sudo su - oracle</copy>
      Last login: Sat Aug 10 23:59:23 GMT 2024 on pts/0
      [oracle@gsmhost ~]$
      ```
@@ -695,7 +695,7 @@ This lab assumes you have already completed the following:
 2.   Connect the sharded database using the default GDS$CATALOG service
 
      ```
-     [oracle@gsmhost ~]$ sqlplus app_schema/App_Schema_Pass_123@gsmhost:1522/GDS\$CATALOG.oradbcloud
+     [oracle@gsmhost ~]$ <copy>sqlplus app_schema/App_Schema_Pass_123@gsmhost:1522/GDS\$CATALOG.oradbcloud</copy>
      
      SQL*Plus: Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on Sat Aug 17 05:11:51 2024
      Version 23.5.0.24.07
@@ -716,12 +716,12 @@ This lab assumes you have already completed the following:
 3.   Run the following script to insert 1000 records into customers table.
 
      ```
-     SQL> begin
+     SQL> <copy>begin
      for i in 1 .. 1000 loop
       insert into customers values(i, 'Firstname', 'Lastname','Gold',NULL,NULL,NULL);
      end loop;
      end;
-     /  2    3    4    5    6  
+     /</copy>  2    3    4    5    6  
      
      PL/SQL procedure successfully completed.
      ```
@@ -731,7 +731,7 @@ This lab assumes you have already completed the following:
 4.   Commit
 
      ```
-     SQL> commit;
+     SQL> <copy>commit;</copy>
      
      Commit complete.
      ```
@@ -741,7 +741,7 @@ This lab assumes you have already completed the following:
 5.   Check the records in the table.
 
      ```
-     SQL> select count(*) from customers;
+     SQL> <copy>select count(*) from customers;</copy>
      
        COUNT(*)
      ----------
@@ -753,7 +753,7 @@ This lab assumes you have already completed the following:
 6.   Connect to each of the shard database, check the records in each of the shard.
 
      ```
-     SQL> connect app_schema/App_Schema_Pass_123@shardhost1:1521/shard1
+     SQL> <copy>connect app_schema/App_Schema_Pass_123@shardhost1:1521/shard1</copy>
      Connected.
      SQL> select count(*) from customers;
      
@@ -761,7 +761,7 @@ This lab assumes you have already completed the following:
      ----------
             339
      
-     SQL> connect app_schema/App_Schema_Pass_123@shardhost2:1521/shard2
+     SQL> <copy>connect app_schema/App_Schema_Pass_123@shardhost2:1521/shard2</copy>
      Connected.
      SQL> select count(*) from customers;
      
@@ -769,7 +769,7 @@ This lab assumes you have already completed the following:
      ----------
             335
      
-     SQL> connect app_schema/App_Schema_Pass_123@shardhost3:1521/shard3
+     SQL> <copy>connect app_schema/App_Schema_Pass_123@shardhost3:1521/shard3</copy>
      Connected.
      SQL> select count(*) from customers;
      
@@ -781,7 +781,7 @@ This lab assumes you have already completed the following:
 7.   You can connect to the shard database with a sharding key
 
      ```
-     SQL> connect app_schema/App_Schema_Pass_123@'(description=(address=(protocol=tcp)(host=gsmhost)(port=1522))(connect_data=(service_name=oltp_rw_svc.orasdb.oradbcloud)(SHARDING_KEY=1)))'
+     SQL> <copy>connect app_schema/App_Schema_Pass_123@'(description=(address=(protocol=tcp)(host=gsmhost)(port=1522))(connect_data=(service_name=oltp_rw_svc.orasdb.oradbcloud)(SHARDING_KEY=1)))'</copy>
      Connected.
      ```
 
@@ -790,7 +790,7 @@ This lab assumes you have already completed the following:
 8.   Show current connected shard DB.
 
      ```
-     SQL> select db_unique_name from v$database;
+     SQL> <copy>select db_unique_name from v$database;</copy>
      
      DB_UNIQUE_NAME
      ------------------------------
@@ -802,7 +802,7 @@ This lab assumes you have already completed the following:
 9.   Try to connect with another sharding key
 
      ```
-     SQL> connect app_schema/App_Schema_Pass_123@'(description=(address=(protocol=tcp)(host=gsmhost)(port=1522))(connect_data=(service_name=oltp_rw_svc.orasdb.oradbcloud)(SHARDING_KEY=1000)))'
+     SQL> <copy>connect app_schema/App_Schema_Pass_123@'(description=(address=(protocol=tcp)(host=gsmhost)(port=1522))(connect_data=(service_name=oltp_rw_svc.orasdb.oradbcloud)(SHARDING_KEY=1000)))'</copy>
      Connected.
      ```
 
@@ -811,7 +811,7 @@ This lab assumes you have already completed the following:
 10.   Show current connected shard DB
 
       ```
-      SQL> select db_unique_name from v$database;
+      SQL> <copy>select db_unique_name from v$database;</copy>
       
       DB_UNIQUE_NAME
       ------------------------------
