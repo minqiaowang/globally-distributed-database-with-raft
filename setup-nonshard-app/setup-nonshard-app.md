@@ -30,7 +30,7 @@ This lab assumes you have already completed the following:
 1. Connect to gsm host using **opc** user.
 
     ```
-    $ ssh -i <ssh_private_key> opc@<gsmhost_public_ip>
+    $ <copy>ssh -i <ssh_private_key> opc@<gsmhost_public_ip></copy>
     ```
 
    
@@ -38,7 +38,7 @@ This lab assumes you have already completed the following:
 2. Copy the ssh private key to the shardhost3.
 
     ```
-    [opc@gsmhost ~]$ scp -i <ssh_private_key> <ssh_private_key> opc@shardhost3:~
+    [opc@gsmhost ~]$ <copy>scp -i <ssh_private_key> <ssh_private_key> opc@shardhost3:~</copy>
     ```
     
     
@@ -46,7 +46,7 @@ This lab assumes you have already completed the following:
 2. Connect to the catalog host.
 
     ```
-    [opc@gsmhost ~]$ ssh -i <ssh_private_key> opc@shardhost3
+    [opc@gsmhost ~]$ <copy>ssh -i <ssh_private_key> opc@shardhost3</copy>
     Last login: Fri Sep 20 04:59:46 2024 from 10.0.0.20
     [opc@shardhost3 ~]$ 
     ```
@@ -56,7 +56,7 @@ This lab assumes you have already completed the following:
 2. Switch to the **oracle** user
 
     ```
-    [opc@shardhost3 ~]$ sudo su - oracle
+    [opc@shardhost3 ~]$ <copy>sudo su - oracle</copy>
     Last login: Fri Sep 20 05:00:24 UTC 2024
     [oracle@shardhost3 ~]$ 
     ```
@@ -66,7 +66,7 @@ This lab assumes you have already completed the following:
 2. Connect to the database as sysdba.
 
     ```
-    [oracle@shardhost3 ~]$ sqlplus / as sysdba
+    [oracle@shardhost3 ~]$ <copy>sqlplus / as sysdba</copy>
     
     SQL*Plus: Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on Fri Sep 20 05:01:02 2024
     Version 23.5.0.24.07
@@ -86,7 +86,7 @@ This lab assumes you have already completed the following:
 3. Create a new pdb name nspdb.
 
     ```
-    SQL> CREATE PLUGGABLE DATABASE nspdb ADMIN USER admin IDENTIFIED BY WelcomePTS_2024#;   
+    SQL> <copy>CREATE PLUGGABLE DATABASE nspdb ADMIN USER admin IDENTIFIED BY WelcomePTS_2024#;</copy>   
     Pluggable database created.
     ```
 
@@ -95,7 +95,7 @@ This lab assumes you have already completed the following:
 4. Open the PDB.
 
     ```
-    SQL> alter pluggable database nspdb open;
+    SQL> <copy>alter pluggable database nspdb open;</copy>
     
     Pluggable database altered.
     ```
@@ -105,7 +105,7 @@ This lab assumes you have already completed the following:
 5. Connect to the PDB as sysdba.
 
     ```
-    SQL> alter session set container = nspdb;
+    SQL> <copy>alter session set container = nspdb;</copy>
     
     Session altered.
     ```
@@ -142,7 +142,7 @@ This lab assumes you have already completed the following:
 7. Exit from the sqlplus.
 
     ```
-    SQL> exit
+    SQL> <copy>exit</copy>
     Disconnected from Oracle Database 23ai EE Extreme Perf Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
     Version 23.5.0.24.07
     [oracle@shardhost3 ~]$ 
@@ -156,7 +156,7 @@ This lab assumes you have already completed the following:
 1. Still in the shardhost3 with **oracle** user. Download the SQL script `nonshard-app-schema.sql`.
 
     ```
-    [oracle@shardhost3 ~]$ wget https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/data-management-library-files/Oracle%20Sharding/nonshard-app-schema.sql
+    [oracle@shardhost3 ~]$ <copy>wget https://github.com/minqiaowang/globally-distributed-database-with-raft/raw/main/setup-nonshard-app/nonshard-app-schema.sql</copy>
     ```
 
    
@@ -289,7 +289,7 @@ This lab assumes you have already completed the following:
 3. Use SQLPLUS to run this sql scripts.
 
     ```
-    [oracle@shardhost3 ~]$ sqlplus / as sysdba
+    [oracle@shardhost3 ~]$ <copy>sqlplus / as sysdba</copy>
     
     SQL*Plus: Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on Fri Sep 20 05:06:08 2024
     Version 23.5.0.24.07
@@ -301,7 +301,7 @@ This lab assumes you have already completed the following:
     Oracle Database 23ai EE Extreme Perf Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
     Version 23.5.0.24.07
     
-    SQL> @nonshard-app-schema.sql
+    SQL> <copy>@nonshard-app-schema.sql</copy>
     ```
 
    
@@ -490,12 +490,12 @@ This lab assumes you have already completed the following:
 5. The single instance demo schema is created. Exit to the gsmhost.
 
     ```
-    05:06:43 SQL> exit
+    05:06:43 SQL> <copy>exit</copy>
     Disconnected from Oracle Database 23ai EE Extreme Perf Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
     Version 23.5.0.24.07
-    [oracle@shardhost3 ~]$ exit
+    [oracle@shardhost3 ~]$ <copy>exit</copy>
     logout
-    [opc@shardhost3 ~]$ exit
+    [opc@shardhost3 ~]$ <copy>exit</copy>
     logout
     Connection to shardhost3 closed.
     [opc@gsmhost ~]$ 
@@ -509,7 +509,7 @@ This lab assumes you have already completed the following:
 1. From the gsm host, switch to the oracle user.
 
     ```
-    [opc@gsmhost ~]$ sudo su - oracle
+    [opc@gsmhost ~]$ <copy>sudo su - oracle</copy>
     Last login: Thu Sep 19 23:21:41 GMT 2024 on pts/0
     [oracle@gsmhost ~]$ 
     ```
@@ -519,7 +519,7 @@ This lab assumes you have already completed the following:
 2. Download the `sdb_demo_app.zip`  file.
 
     ```
-    [oracle@gsmhost ~]$ wget https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/data-management-library-files/Oracle%20Sharding/sdb_demo_app.zip
+    [oracle@gsmhost ~]$ <copy>wget https://github.com/minqiaowang/globally-distributed-database-with-raft/raw/main/setup-nonshard-app/sdb_demo_app.zip</copy>
     ```
 
    
@@ -527,7 +527,7 @@ This lab assumes you have already completed the following:
 3. Unzip the file. This will create `sdb_demo_app` directory under the `/home/oracle`.
 
     ```
-    [oracle@gsmhost ~]$ unzip sdb_demo_app.zip
+    [oracle@gsmhost ~]$ <copy>unzip sdb_demo_app.zip</copy>
     ```
 
    
@@ -535,7 +535,7 @@ This lab assumes you have already completed the following:
 4. Change to the `sdb_demo_app/sql` directory.
 
     ```
-    [oracle@gsmhost ~]$ cd sdb_demo_app/sql
+    [oracle@gsmhost ~]$ <copy>cd sdb_demo_app/sql</copy>
     [oracle@gsmhost sql]$ 
     ```
 
@@ -544,7 +544,7 @@ This lab assumes you have already completed the following:
 5. View the content of the `nonshard_demo_app_ext.sql`. Make sure the connect string is correct to the non-sharded instance pdb.
 
     ```
-    [oracle@gsmhost sql]$ cat nonshard_demo_app_ext.sql 
+    [oracle@gsmhost sql]$ <copy>cat nonshard_demo_app_ext.sql</copy> 
     -- Create catalog monitor packages
     connect sys/WelcomePTS_2024#@shardhost3:1521/nspdb as sysdba;
     
@@ -582,14 +582,14 @@ This lab assumes you have already completed the following:
 6. Using SQLPLUS to run the script.
 
     ```
-    [oracle@gsmhost sql]$ sqlplus /nolog
+    [oracle@gsmhost sql]$ <copy>sqlplus /nolog</copy>
     
     SQL*Plus: Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on Fri Sep 20 04:42:49 2024
     Version 23.5.0.24.07
     
     Copyright (c) 1982, 2024, Oracle.  All rights reserved.
     
-    SQL> @nonshard_demo_app_ext.sql
+    SQL> <copy>@nonshard_demo_app_ext.sql</copy>
     ```
 
    
@@ -700,7 +700,7 @@ This lab assumes you have already completed the following:
 8. Exit the sqlplus. Then change directory to the `sdb_demo_app`.
 
     ```
-    [oracle@gsmhost sql]$ cd ~/sdb_demo_app
+    [oracle@gsmhost sql]$ <copy>cd ~/sdb_demo_app</copy>
     [oracle@gsmhost sdb_demo_app]$ 
     ```
 
@@ -709,7 +709,7 @@ This lab assumes you have already completed the following:
 9. Review the `nonsharddemo.properties` file content. Make sure the `connect_string` and service name  is correct.
 
     ```
-    [oracle@gsmhost sdb_demo_app]$ cat nonsharddemo.properties 
+    [oracle@gsmhost sdb_demo_app]$ <copy>cat nonsharddemo.properties</copy> 
     name=demo
     connect_string=(ADDRESS_LIST=(LOAD_BALANCE=off)(FAILOVER=on)(ADDRESS=(HOST=shardhost3)(PORT=1521)(PROTOCOL=tcp)))
     monitor.user=dbmonuser
@@ -791,7 +791,7 @@ In this step, you will export the demo application data and copy the dmp file to
 1. Exit to the gsmhost **opc** user, connect to the shardhost3.
 
     ```
-    [opc@gsmhost ~]$ ssh -i labkey opc@shardhost3
+    [opc@gsmhost ~]$ <copy>ssh -i <ssh_private_key> opc@shardhost3</copy>
     Last login: Fri Sep 20 05:00:04 2024 from 10.0.0.20
     [opc@shardhost3 ~]$ 
     ```
@@ -801,7 +801,7 @@ In this step, you will export the demo application data and copy the dmp file to
 2.  Switch to the oracle user.
 
     ```
-    [opc@shardhost3 ~]$ sudo su - oracle
+    [opc@shardhost3 ~]$ <copy>sudo su - oracle</copy>
     Last login: Fri Sep 20 05:18:56 UTC 2024 on pts/0
     [oracle@shardhost3 ~]$ 
     ```
@@ -811,7 +811,7 @@ In this step, you will export the demo application data and copy the dmp file to
 2. Connect to the non-sharded database as `app_schema` user with SQLPLUS.
 
     ```
-    [oracle@shardhost3 ~]$ sqlplus app_schema/app_schema@shardhost3:1521/nspdb
+    [oracle@shardhost3 ~]$ <copy>sqlplus app_schema/app_schema@shardhost3:1521/nspdb</copy>
     
     SQL*Plus: Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on Fri Sep 20 05:19:53 2024
     Version 23.5.0.24.07
@@ -832,7 +832,7 @@ In this step, you will export the demo application data and copy the dmp file to
 3. Create a dump directory and 
 
     ```
-    SQL> create directory demo_pump_dir as '/home/oracle';
+    SQL> <copy>create directory demo_pump_dir as '/home/oracle';</copy>
     
     Directory created.
     ```
@@ -842,7 +842,7 @@ In this step, you will export the demo application data and copy the dmp file to
 4. Exit the SQLPLUS.
 
     ```
-    SQL> exit
+    SQL> <copy>exit</copy>
     Disconnected from Oracle Database 23ai EE Extreme Perf Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
     Version 23.5.0.24.07
     [oracle@shardhost3 ~]$ 
@@ -908,36 +908,94 @@ In this step, you will export the demo application data and copy the dmp file to
 6. From the shardhost3, Exit to **opc** user.
 
     ```
-    [oracle@shardhost3 ~]$ exit
+    [oracle@shardhost3 ~]$ <copy>exit</copy>
     logout
     [opc@shardhost3 ~]$
     ```
 
    
 
-7. Copy the dump file to the catalog host and each of the shard host.
+7. You can copy the dump file to a shared storage which all the host can access it or you can copy it to each of the host. In our lab, we will copy the dump file to the catalog host and each of the shard host.
 
     ```
-    [opc@shardhost3 ~]$ sudo scp -i labkey /home/oracle/original.dmp opc@catahost:/tmp
+    [opc@shardhost3 ~]$ <copy>sudo scp -i <ssh_private_key> /home/oracle/original.dmp opc@catahost:/tmp</copy>
     The authenticity of host 'catahost (10.0.0.10)' can't be established.
     ECDSA key fingerprint is SHA256:+9TKXWk+ZjpgVTHccz73xTHhrj+T8UHvBPhOjutPk5c.
     Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
     Warning: Permanently added 'catahost,10.0.0.10' (ECDSA) to the list of known hosts.
     original.dmp                                                                                     100%   13MB 189.4MB/s   00:00  
     
-    [opc@shardhost3 ~]$ sudo scp -i labkey /home/oracle/original.dmp opc@shardhost1:/tmp
+    [opc@shardhost3 ~]$ <copy>sudo scp -i <ssh_private_key> /home/oracle/original.dmp opc@shardhost1:/tmp</copy>
     The authenticity of host 'shardhost1 (10.0.0.11)' can't be established.
     ECDSA key fingerprint is SHA256:Ukred/JAQK0SvhfGPr7SuBexUkW4FqiLKsNQzwsiv3w.
     Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
     Warning: Permanently added 'shardhost1,10.0.0.11' (ECDSA) to the list of known hosts.
     original.dmp                                                                                     100%   13MB 152.0MB/s   00:00    
     
-    [opc@shardhost3 ~]$ sudo scp -i labkey /home/oracle/original.dmp opc@shardhost2:/tmp
+    [opc@shardhost3 ~]$ <copy>sudo scp -i <ssh_private_key> /home/oracle/original.dmp opc@shardhost2:/tmp</copy>
     The authenticity of host 'shardhost2 (10.0.0.12)' can't be established.
     ECDSA key fingerprint is SHA256:9bcJpOj9J0YdRhuer1cenmiIkj/R0sImAuWaHlO9YSQ.
     Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
     Warning: Permanently added 'shardhost2,10.0.0.12' (ECDSA) to the list of known hosts.
-    original.dmp                                                                                     100%   13MB 172.4MB/s   00:00    
+    original.dmp                                                                                     100%   13MB 172.4MB/s   00:00 
+    ```
+    
+    
+    
+7. Exit to the gsmhost
+
+    ```
+    [opc@shardhost3 ~]$ <copy>exit</copy>
+    logout
+    Connection to shardhost3 closed.
+    [opc@gsmhost ~]$ 
+    ```
+    
+    
+    
+7. Connect to catalog host, move the dump file to the ```/home/oracle``` directory
+
+    ```
+    [opc@gsmhost ~]$ <copy>ssh -i <ssh_private_key> opc@catahost</copy>
+    Last login: Fri Sep 20 04:53:28 2024 from 10.0.0.20
+    
+    [opc@catahost ~]$ <copy>sudo chown oracle:oinstall /tmp/original.dmp</copy>
+    [opc@catahost ~]$ <copy>sudo mv /tmp/original.dmp /home/oracle</copy>
+    [opc@catahost ~]$ <copy>exit</copy>
+    logout
+    Connection to catahost closed.
+    [opc@gsmhost ~]$ 
+    ```
+    
+    
+    
+7. Connect to shardhost1, move the dump file to the ```/home/oracle``` directory
+
+    ```
+    [opc@gsmhost ~]$ <copy>ssh -i <ssh_private_key> opc@shardhost1</copy>
+    Last login: Thu Sep 19 23:15:42 2024 from 10.0.0.20
+    [opc@shardhost1 ~]$ <copy>sudo chown oracle:oinstall /tmp/original.dmp</copy>
+    [opc@shardhost1 ~]$ <copy>sudo mv /tmp/original.dmp /home/oracle</copy>
+    [opc@shardhost1 ~]$ <copy>exit</copy>
+    logout
+    Connection to shardhost1 closed.
+    [opc@gsmhost ~]$ 
+    ```
+    
+    
+    
+7. Connect to shardhost2, move the dump file to the ```/home/oracle``` directory
+
+    ```
+    [opc@gsmhost ~]$ <copy>ssh -i <ssh_private_key> opc@shardhost2</copy>
+    Last login: Fri Sep 20 04:53:28 2024 from 10.0.0.20
+    
+    [opc@catahost ~]$ <copy>sudo chown oracle:oinstall /tmp/original.dmp</copy>
+    [opc@catahost ~]$ <copy>sudo mv /tmp/original.dmp /home/oracle</copy>
+    [opc@catahost ~]$ <copy>exit</copy>
+    logout
+    Connection to catahost closed.
+    [opc@gsmhost ~]$ 
     ```
 
    
