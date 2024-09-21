@@ -693,7 +693,7 @@ This lab assumes you have already completed the following:
 
      
 
-2.   Connect the sharded database using the default GDS$CATALOG service
+2.   Connect the sharded database using the default ```GDS$CATALOG``` service
 
      ```
      [oracle@gsmhost ~]$ <copy>sqlplus app_schema/App_Schema_Pass_123@gsmhost:1522/GDS\$CATALOG.oradbcloud</copy>
@@ -756,7 +756,7 @@ This lab assumes you have already completed the following:
      ```
      SQL> <copy>connect app_schema/App_Schema_Pass_123@shardhost1:1521/shard1</copy>
      Connected.
-     SQL> select count(*) from customers;
+     SQL> <copy>select count(*) from customers;</copy>
      
        COUNT(*)
      ----------
@@ -764,7 +764,7 @@ This lab assumes you have already completed the following:
      
      SQL> <copy>connect app_schema/App_Schema_Pass_123@shardhost2:1521/shard2</copy>
      Connected.
-     SQL> select count(*) from customers;
+     SQL> <copy>select count(*) from customers;</copy>
      
        COUNT(*)
      ----------
@@ -772,7 +772,7 @@ This lab assumes you have already completed the following:
      
      SQL> <copy>connect app_schema/App_Schema_Pass_123@shardhost3:1521/shard3</copy>
      Connected.
-     SQL> select count(*) from customers;
+     SQL> <copy>select count(*) from customers;</copy>
      
        COUNT(*)
      ----------
@@ -821,6 +821,23 @@ This lab assumes you have already completed the following:
 
       
 
+11.   Connect to catalog database.
+
+      ```
+      SQL> <copy>connect app_schema/App_Schema_Pass_123@gsmhost:1522/GDS$CATALOG.oradbcloud</copy>
+      ```
+      
+      
+      
+11.   Delete the data in the customers table and commit;
+
+      ```
+      SQL> <copy>delete from customers;</copy>
+      SQL> <copy>commit;</copy>
+      ```
+      
+      
+      
 11.   Exit from SQLPlus.
 
       
@@ -839,37 +856,17 @@ When loading a sharded table, each database shard accommodates a distinct subset
 
 Loading the data directly into the database shards is much faster, because each shard is loaded separately. The Data Pump Import detects that you are importing into a shard and only load rows that belong to that shard.  
 
-1. From gsmhost **opc** user, connec to the catalog host.
+1. From gsmhost **oracle** user, connect to the catalog pdb with `app_schema` user.
 
     ```
-    [opc@gsmhost ~]$ <copy>ssh -i <ssh_private_key> opc@catahost</copy>
-    Last login: Fri Sep 20 05:50:21 2024 from 10.0.0.20
-    [opc@catahost ~]$
-    ```
-
+    [oracle@gsmhost ~]$ <copy>sqlplus app_schema/App_Schema_Pass_123@gsmhost:1522/GDS\$CATALOG.oradbcloud</copy>
     
-
-2. Switch to **oracle** user
-
-    ```
-    [opc@catahost ~]$ <copy>sudo su - oracle</copy>
-    Last login: Fri Sep 20 06:17:26 UTC 2024
-    [oracle@catahost ~]$ 
-    ```
-
-    
-
-3. Use SQLPLUS, connect to the catalog pdb with `app_schema` user.
-
-    ```
-    [oracle@catahost ~]$ <copy>sqlplus app_schema/App_Schema_Pass_123@catahost:1521/catapdb</copy>
-    
-    SQL*Plus: Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on Fri Sep 20 06:29:59 2024
+    SQL*Plus: Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on Sat Sep 21 01:23:49 2024
     Version 23.5.0.24.07
     
     Copyright (c) 1982, 2024, Oracle.  All rights reserved.
     
-    Last Successful login time: Fri Sep 20 2024 06:29:18 +00:00
+    Last Successful login time: Sat Sep 21 2024 01:23:29 +00:00
     
     Connected to:
     Oracle Database 23ai EE Extreme Perf Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
@@ -899,10 +896,10 @@ Loading the data directly into the database shards is much faster, because each 
 
     
 
-5. From the catalog host, run the following command to import the public table data.
+5. From the gsm host, run the following command to import the public table data.
 
     ```
-    [oracle@catahost ~]$ <copy>impdp app_schema/App_Schema_Pass_123@catahost:1521/catapdb directory=demo_pump_dir \
+    [oracle@gsmhost ~]$ <copy>impdp app_schema/App_Schema_Pass_123@catahost:1521/catapdb directory=demo_pump_dir \
           dumpfile=original.dmp logfile=imp.log \
           tables=Products \
           content=DATA_ONLY</copy>
@@ -932,7 +929,7 @@ Loading the data directly into the database shards is much faster, because each 
 7. Run the following command to import data into the shard1 tables.
 
     ```
-    [oracle@catahost ~]$ <copy>impdp app_schema/App_Schema_Pass_123@shardhost1:1521/shard1 directory=demo_pump_dir \
+    [oracle@gsmhost ~]$ <copy>impdp app_schema/App_Schema_Pass_123@shardhost1:1521/shard1 directory=demo_pump_dir \
           dumpfile=original.dmp logfile=imp.log \
           tables=Customers, Orders, LineItems \
           content=DATA_ONLY</copy>
@@ -940,7 +937,7 @@ Loading the data directly into the database shards is much faster, because each 
 
     
 
-8. The result likes the following. You may notes the only part of the rows are imported into the sharded tables.
+8. The result likes the following. 
 
     ```
     Import: Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on Fri Sep 20 06:34:00 2024
@@ -960,10 +957,49 @@ Loading the data directly into the database shards is much faster, because each 
 
     
 
-9. Run the following command to load data into shard2 tables.
+7. You may notes the all the rows are imported into the sharded tables. However, when you check from each of the shard database, you can found only part of the data in shard1 can be access. Connect to shard1 and check the row count.
 
     ```
-    [oracle@catahost ~]$ <copy>impdp app_schema/App_Schema_Pass_123@shardhost2:1521/shard2 directory=demo_pump_dir \
+    [oracle@gsmhost ~]$ sqlplus app_schema/App_Schema_Pass_123@shardhost1:1521/shard1
+    
+    SQL*Plus: Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on Sat Sep 21 01:31:51 2024
+    Version 23.5.0.24.07
+    
+    Copyright (c) 1982, 2024, Oracle.  All rights reserved.
+    
+    Last Successful login time: Sat Sep 21 2024 01:28:12 +00:00
+    
+    Connected to:
+    Oracle Database 23ai EE Extreme Perf Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems
+    Version 23.5.0.24.07
+    
+    SQL> select count(*) from customers;
+    
+      COUNT(*)
+    ----------
+          9838
+    ```
+
+    
+
+8. Connect to shard2 or shard3, you can found there is no record can be select.
+
+    ```
+    SQL> <copy>connect app_schema/App_Schema_Pass_123@shardhost2:1521/shard2</copy>
+    Connected.
+    SQL> <copy>select count(*) from customers;</copy>
+    
+      COUNT(*)
+    ----------
+    	 0
+    ```
+
+    
+
+9. Exit from SQLPlus. Run the following command to load data into shard2 tables.
+
+    ```
+    [oracle@gsmhost ~]$ <copy>impdp app_schema/App_Schema_Pass_123@shardhost2:1521/shard2 directory=demo_pump_dir \
           dumpfile=original.dmp logfile=imp.log \
           tables=Customers, Orders, LineItems \
           content=DATA_ONLY</copy>
@@ -994,7 +1030,7 @@ Loading the data directly into the database shards is much faster, because each 
 11. Run the following command to load data into shard3 tables.
 
     ```
-    [oracle@catahost ~]$ <copy>impdp app_schema/App_Schema_Pass_123@shardhost3:1521/shard3 directory=demo_pump_dir \
+    [oracle@gsmhost ~]$ <copy>impdp app_schema/App_Schema_Pass_123@shardhost3:1521/shard3 directory=demo_pump_dir \
           dumpfile=original.dmp logfile=imp.log \
           tables=Customers, Orders, LineItems \
           content=DATA_ONLY</copy>
@@ -1020,7 +1056,7 @@ Loading the data directly into the database shards is much faster, because each 
     Job "APP_SCHEMA"."SYS_IMPORT_TABLE_01" successfully completed at Fri Sep 20 06:45:10 2024 elapsed 0 00:00:38
     ```
 
-13. Exit to the gsm host.
+13. Now all the data from normal instance migrate to the sharded tables.
 
 You may now proceed to the next lab.
 
