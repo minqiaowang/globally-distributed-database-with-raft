@@ -61,7 +61,7 @@ This lab assumes you have already completed the following:
     REM
     REM Connect to the Shard Catalog and Create Schema
     REM
-    connect sys/WelcomePTS_2024#@catahost:1521/catapdb as sysdba
+    connect sys/WelcomePTS_2024#@shardhost0:1521/shard0 as sysdba
     REM alter session set container=catapdb;
     alter session enable shard ddl;
     create user app_schema identified by App_Schema_Pass_123;
@@ -88,7 +88,7 @@ This lab assumes you have already completed the following:
     REM
     REM Create Sharded and Duplicated tables
     REM
-    connect app_schema/App_Schema_Pass_123@catahost:1521/catapdb
+    connect app_schema/App_Schema_Pass_123@shardhost0:1521/shard0
     alter session enable shard ddl;
     REM
     REM Create a Sharded table for Customers  (Root table)
@@ -654,7 +654,7 @@ This lab assumes you have already completed the following:
 10. Connect to the catalog database using your own sys user password..
 
     ```
-    SQL> <copy>connect sys/WelcomePTS_2024#@catahost:1521/catapdb as sysdba</copy>
+    SQL> <copy>connect sys/WelcomePTS_2024#@shardhost0:1521/shard0 as sysdba</copy>
     Connected.
     SQL> 
     ```
@@ -679,21 +679,7 @@ This lab assumes you have already completed the following:
 
 ## Task 3: Insert Data Into Sharded Table
 
-1.   Connect to the gsm host and switch to **oracle** user
-
-     ```
-     $ <copy>ssh -i <ssh_private_key> opc@<gsmhost_public_ip></copy>
-     Last login: Sun Nov 29 01:26:28 2020 from 59.66.120.23
-     -bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
-     
-     [opc@gsmhost ~]$ <copy>sudo su - oracle</copy>
-     Last login: Sat Aug 10 23:59:23 GMT 2024 on pts/0
-     [oracle@gsmhost ~]$
-     ```
-
-     
-
-2.   Connect the sharded database using the default ```GDS$CATALOG``` service
+1.   Still in the gsm host with **oracle** user. Connect the sharded database using the default ```GDS$CATALOG``` service
 
      ```
      [oracle@gsmhost ~]$ <copy>sqlplus app_schema/App_Schema_Pass_123@gsmhost:1522/GDS\$CATALOG.oradbcloud</copy>
@@ -714,7 +700,7 @@ This lab assumes you have already completed the following:
 
      
 
-3.   Run the following script to insert 1000 records into customers table.
+2.   Run the following script to insert 1000 records into customers table.
 
      ```
      SQL> <copy>begin
@@ -729,7 +715,7 @@ This lab assumes you have already completed the following:
 
      
 
-4.   Commit
+3.   Commit
 
      ```
      SQL> <copy>commit;</copy>
@@ -739,7 +725,7 @@ This lab assumes you have already completed the following:
 
      
 
-5.   Check the records in the table.
+4.   Check the records in the table.
 
      ```
      SQL> <copy>select count(*) from customers;</copy>
@@ -751,7 +737,7 @@ This lab assumes you have already completed the following:
 
      
 
-6.   Connect to each of the shard database, check the records in each of the shard.
+5.   Connect to each of the shard database, check the records in each of the shard.
 
      ```
      SQL> <copy>connect app_schema/App_Schema_Pass_123@shardhost1:1521/shard1</copy>
@@ -779,7 +765,7 @@ This lab assumes you have already completed the following:
             326
      ```
 
-7.   You can connect to the shard database with a sharding key
+6.   You can connect to the shard database with a sharding key
 
      ```
      SQL> <copy>connect app_schema/App_Schema_Pass_123@'(description=(address=(protocol=tcp)(host=gsmhost)(port=1522))(connect_data=(service_name=oltp_rw_svc.orasdb.oradbcloud)(SHARDING_KEY=1)))'</copy>
@@ -788,7 +774,7 @@ This lab assumes you have already completed the following:
 
      
 
-8.   Show current connected shard DB.
+7.   Show current connected shard DB.
 
      ```
      SQL> <copy>select db_unique_name from v$database;</copy>
@@ -800,7 +786,7 @@ This lab assumes you have already completed the following:
 
      
 
-9.   Try to connect with another sharding key
+8.   Try to connect with another sharding key
 
      ```
      SQL> <copy>connect app_schema/App_Schema_Pass_123@'(description=(address=(protocol=tcp)(host=gsmhost)(port=1522))(connect_data=(service_name=oltp_rw_svc.orasdb.oradbcloud)(SHARDING_KEY=1000)))'</copy>
@@ -809,36 +795,36 @@ This lab assumes you have already completed the following:
 
      
 
-10.   Show current connected shard DB
+9.   Show current connected shard DB
 
-      ```
-      SQL> <copy>select db_unique_name from v$database;</copy>
-      
-      DB_UNIQUE_NAME
-      ------------------------------
-      sdb2_workshop
-      ```
+     ```
+     SQL> <copy>select db_unique_name from v$database;</copy>
+     
+     DB_UNIQUE_NAME
+     ------------------------------
+     sdb2_workshop
+     ```
 
-      
+     
 
-11.   Connect to catalog database.
+10.   Connect to catalog database.
 
       ```
       SQL> <copy>connect app_schema/App_Schema_Pass_123@gsmhost:1522/GDS$CATALOG.oradbcloud</copy>
       ```
+
       
-      
-      
+
 11.   Delete the data in the customers table and commit;
 
       ```
       SQL> <copy>delete from customers;</copy>
       SQL> <copy>commit;</copy>
       ```
+
       
-      
-      
-11.   Exit from SQLPlus.
+
+12.   Exit from SQLPlus.
 
       
 
@@ -899,7 +885,7 @@ Loading the data directly into the database shards is much faster, because each 
 5. From the gsm host, run the following command to import the public table data.
 
     ```
-    [oracle@gsmhost ~]$ <copy>impdp app_schema/App_Schema_Pass_123@catahost:1521/catapdb directory=demo_pump_dir \
+    [oracle@gsmhost ~]$ <copy>impdp app_schema/App_Schema_Pass_123@shardhost0:1521/shard0 directory=demo_pump_dir \
           dumpfile=original.dmp logfile=imp.log \
           tables=Products \
           content=DATA_ONLY</copy>

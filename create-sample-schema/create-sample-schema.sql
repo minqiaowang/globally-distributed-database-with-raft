@@ -5,7 +5,7 @@ spool /home/oracle/create_sample_schema.lst
 REM
 REM Connect to the Shard Catalog and Create Schema
 REM
-connect sys/WelcomePTS_2024#@catahost:1521/catapdb as sysdba
+connect sys/WelcomePTS_2024#@shardhost0:1521/shard0 as sysdba
 REM alter session set container=catapdb;
 alter session enable shard ddl;
 create user app_schema identified by App_Schema_Pass_123;
@@ -32,7 +32,7 @@ CREATE TABLESPACE products_tsp datafile size 100m autoextend on next 10M maxsize
 REM
 REM Create Sharded and Duplicated tables
 REM
-connect app_schema/App_Schema_Pass_123@catahost:1521/catapdb
+connect app_schema/App_Schema_Pass_123@shardhost0:1521/shard0
 alter session enable shard ddl;
 REM
 REM Create a Sharded table for Customers  (Root table)
