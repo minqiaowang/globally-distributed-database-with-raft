@@ -95,6 +95,14 @@ When using Resource Manager to deploy an environment, execute a terraform  **App
     Suggestion: Please retry or contact support for help with service: Database Db System
     ```
 
+    or
+
+    ```
+    Error: 400-InvalidParameter, Cannot access Object Storage using the subnet with the following OCID: ocid1.subnet.oc1.ap-seoul-1.aaa...xfa. Review your VCN configuration. If you need further assistance, contact Oracle Support.
+    
+    Suggestion: Please update the parameter(s) in the Terraform config as per error message Cannot access Object Storage using the subnet with the following OCID: ocid1.subnet.oc1.ap-seoul-1.aaa...xfa. Review your VCN configuration. If you need further assistance, contact Oracle Support.
+    ```
+
     In this situation, some base databases have been provisioned, others with error. You can click **Apply** again in the stack details page to provision the rest resources).
 
     ![image-output](images/image-output.png)
