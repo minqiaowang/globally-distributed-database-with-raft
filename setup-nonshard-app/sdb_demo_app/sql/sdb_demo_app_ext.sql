@@ -1,10 +1,10 @@
 -- Create catalog monitor packages
 connect / as sysdba
-alter session set container=catapdb;
+alter session set container=shard0;
 
 @catalog_monitor.sql
 
-connect app_schema/app_schema@cata:1521/catapdb;
+connect app_schema/App_Schema_Pass_123@shardhost0:1521/shard0;
 
 alter session enable shard ddl;
 
@@ -17,7 +17,7 @@ alter session disable shard ddl;
 
 -- Allow a special query for dbaview
 connect / as sysdba
-alter session set container=catapdb;
+alter session set container=shard0;
 
 -- For demo app purposes
 grant shard_monitor_role, gsmadmin_role to app_schema;

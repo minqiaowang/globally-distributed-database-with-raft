@@ -1,8 +1,8 @@
-# Create Sample Schema with Sharded Tables
+# Migrate the Application to Globally Distribute Database
 
 ## Introduction
 
-In this lab you will create a sample schema. You will create a sharded table family `Customers->Orders->LineItems` sharded by `CustId`, and a duplicate table `Products`.
+In order to migrate the application from normal instance to globally distribute database, you need to redesign the schema and application. In this lab you will create a sample schema in the globally distribute database. You will create a sharded table family `Customers->Orders->LineItems` sharded by `CustId`, and a duplicate table `Products`.
 
 Estimated Lab Time: 30 minutes.
 
@@ -13,11 +13,13 @@ In this lab, you will perform the following steps:
 - Verify that the DDLs have been propagated to all the shards
 - Insert data into the sharded table
 - Import dump file into the sharded tables.
+- Setup and run the sample application
 
 ### Prerequisites
 
 This lab assumes you have already completed the following:
-- Deploy the RAFT Sharded Database
+- Deploy the Globally Distributed Database with RAFT
+- Set up the non sharded database
 
 
 ## Task 1: Create Sample Schema
@@ -1043,6 +1045,139 @@ Loading the data directly into the database shards is much faster, because each 
     ```
 
 13. Now all the data from normal instance migrate to the sharded tables.
+
+## Task 5: Setup and Run the Application for Globally Distribute Database
+
+1.   In the gsm host with **oracle** user, change the directory to ```sdb_demo_app/sql```.
+
+     ```
+     [oracle@gsmhost ~]$ <copy>cd sdb_demo_app/sql</copy>
+     [oracle@gsmhost sql]$
+     ```
+
+     
+
+2.   View the content in the file ```sdb_demo_app_ext.sql ```. Make sure the connect string is correct.
+
+     ```
+     [oracle@gsmhost sql]$ <copy>cat sdb_demo_app_ext.sql</copy> 
+     -- Create catalog monitor packages
+     connect sys/WelcomePTS_2024#@shardhost0:1521/shard0 as sysdba
+     @catalog_monitor.sql
+     
+     connect app_schema/App_Schema_Pass_123@shardhost0:1521/shard0;
+     
+     alter session enable shard ddl;
+     
+     CREATE OR REPLACE VIEW SAMPLE_ORDERS AS
+       SELECT OrderId, CustId, OrderDate, SumTotal FROM
+         (SELECT * FROM ORDERS ORDER BY OrderId DESC)
+           WHERE ROWNUM < 10;
+     
+     alter session disable shard ddl;
+     
+     -- Allow a special query for dbaview
+     connect sys/WelcomePTS_2024#@shardhost0:1521/shard0 as sysdba
+     
+     -- For demo app purposes
+     grant shard_monitor_role, gsmadmin_role to app_schema;
+     
+     alter session enable shard ddl;
+     
+     create user dbmonuser identified by TEZiPP4_MsLLL_1;
+     grant connect, alter session, shard_monitor_role, gsmadmin_role to dbmonuser;
+     
+     grant all privileges on app_schema.products to dbmonuser;
+     grant read on app_schema.sample_orders to dbmonuser;
+     
+     alter session disable shard ddl;
+     -- End workaround
+     
+     exec dbms_global_views.create_any_view('SAMPLE_ORDERS', 'APP_SCHEMA.SAMPLE_ORDERS', 'GLOBAL_SAMPLE_ORDERS', 0, 1);
+     ```
+
+     
+
+3.   Using SQLPlus to run the script. Make sure no error in the result.
+
+     ```
+     [oracle@gsmhost sql]$ <copy>sqlplus /nolog</copy>
+     
+     SQL*Plus: Release 23.0.0.0.0 - for Oracle Cloud and Engineered Systems on Sat Sep 21 23:54:21 2024
+     Version 23.5.0.24.07
+     
+     Copyright (c) 1982, 2024, Oracle.  All rights reserved.
+     
+     SQL> <copy>@sdb_demo_app_ext.sql</copy>
+     ```
+
+     
+
+4.   Exit form SQLPlus. Change the directory to ```sdb_demo_app```
+
+     ```
+     [oracle@gsmhost sql]$ <copy>cd ~/sdb_demo_app</copy>
+     [oracle@gsmhost sdb_demo_app]$ 
+     ```
+
+     
+
+5.   View the content of th property file.  
+
+     ```
+     [oracle@gsmhost sdb_demo_app]$ <copy>cat sdbdemo.properties</copy> 
+     name=demo
+     connect_string=(ADDRESS_LIST=(LOAD_BALANCE=off)(FAILOVER=on)(ADDRESS=(HOST=localhost)(PORT=1522)(PROTOCOL=tcp)))
+     monitor.user=dbmonuser
+     monitor.pass=TEZiPP4MsLLL
+     #app.service.write=oltp_rw_srvc.cust_sdb.oradbcloud
+     app.service.write=oltp_rw_svc.orasdb.oradbcloud
+     #app.service.readonly=oltp_rw_srvc.cust_sdb.oradbcloud
+     app.service.readonly=oltp_ro_svc.orasdb.oradbcloud
+     app.user=app_schema
+     app.pass=App_Schema_Pass_123
+     app.threads=7
+     ```
+
+     
+
+6.   Run the application using this property file.
+
+     ```
+     [oracle@gsmhost sdb_demo_app]$ <copy>./run.sh demo sdbdemo.properties</copy>
+     ```
+
+     The result like the following:
+
+     ```
+      RO Queries | RW Queries | RO Failed  | RW Failed  | APS 
+               0            0            0            0            3
+               3            0            0            0            0
+             136            0            0            0           49
+            1195          184            0            0          385
+            3842          577            0            0          948
+            6477         1048            0            0          953
+            9666         1541            0            0         1146
+           13158         2120            0            0         1257
+           17226         2771            0            0         1460
+           21349         3433            0            0         1496
+           25599         4060            0            0         1534
+           29616         4723            0            0         1441
+           33419         5424            0            0         1380
+           37272         6092            0            0         1400
+           41356         6742            0            0         1482
+           45025         7409            0            0         1321
+           48884         8079            0            0         1403
+           52662         8733            0            0         1388
+           56624         9386            0            0         1437
+           60542        10019            0            0         1442
+     ```
+
+     
+
+7.   The application can now running with globally distribute database. Using ```Control+C``` to exit the application.
+
+
 
 You may now proceed to the next lab.
 
