@@ -511,10 +511,10 @@ This lab assumes you have already completed the following:
 
      You may now proceed to the next lab.
 
-     ## Acknowledgements
+## Acknowledgements
 
-     * **Author** - Minqiao Wang, Oracle China 
-     * **Contributor** - Satyabrata Mishra, Database Product Management
-     * **Last Updated By/Date** - Minqiao Wang, Sep 2024  
+* **Author** - Minqiao Wang, Oracle China 
+* **Contributor** - Satyabrata Mishra, Database Product Management
+* **Last Updated By/Date** - Minqiao Wang, Sep 2024  
 
      
