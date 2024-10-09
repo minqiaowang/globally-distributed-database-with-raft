@@ -20,7 +20,7 @@ grant shard_monitor_role, gsmadmin_role to app_schema;
 
 alter session enable shard ddl;
 
-create user dbmonuser identified by TEZiPP4MsLLL;
+create user dbmonuser identified by TEZiPP4_MsLLL_1;
 grant connect, alter session, shard_monitor_role, gsmadmin_role to dbmonuser;
 
 grant all privileges on app_schema.products to dbmonuser;

@@ -1129,7 +1129,7 @@ Loading the data directly into the database shards is much faster, because each 
      name=demo
      connect_string=(ADDRESS_LIST=(LOAD_BALANCE=off)(FAILOVER=on)(ADDRESS=(HOST=localhost)(PORT=1522)(PROTOCOL=tcp)))
      monitor.user=dbmonuser
-     monitor.pass=TEZiPP4MsLLL
+     monitor.pass=TEZiPP4_MsLLL_1
      #app.service.write=oltp_rw_srvc.cust_sdb.oradbcloud
      app.service.write=oltp_rw_svc.orasdb.oradbcloud
      #app.service.readonly=oltp_rw_srvc.cust_sdb.oradbcloud
