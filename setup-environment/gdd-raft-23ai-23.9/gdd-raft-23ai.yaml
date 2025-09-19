@@ -1,0 +1,69 @@
+## Copyright (c) 2022, Oracle and/or its affiliates. 
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
+title: "Terraform Schema Sample"
+stackDescription: "terraform schema sample to provision a compute instance"
+schemaVersion: 1.2.0
+version: "20201104"
+locale: "en"
+
+variableGroups:
+  - title: "General Configuration"
+    visible: false
+    variables:
+      - tenancy_ocid
+      - region
+      - compartment_ocid
+      - AD
+      - db_system_shape
+      - cpu_core_count
+      - db_system_storage_volume_performance_mode
+      - db_edition
+      - db_admin_password
+      - db_disk_redundancy
+      - n_character_set
+      - character_set
+      - db_workload
+      - data_storage_size_in_gb
+      - license_model
+      - flex_instance_image_ocid
+
+  - title: Required Variables
+    visible: true
+    variables:
+      - ssh_public_key
+      - db_name_suffix
+ 
+variables:
+
+  region:
+    type: oci:identity:region:name
+    visible: false
+    required: true
+    title: ${Messages.solutionsHub.genericVariables.region.title()}
+    description: ${Messages.solutionsHub.genericVariables.region.description()}
+
+  AD:
+    type: num
+    required: true
+    visibile: false
+ 
+  compartment_ocid:
+    type: oci:identity:compartment:id
+    required: true
+    visibile: false
+    title: Compartment
+    description: Compartment where you want to create the solution resources
+
+  ssh_public_key:
+    type: oci:core:ssh:publickey
+    required: true
+    title: "Public SSH Key"
+    description: "Choose public SSH Key to be uploaded into compute instances."
+  
+  db_name_suffix:
+    type: string
+    required: true
+    default: workshop
+    title: DB Unique Name Suffix
+    description: DB Unique Name Suffix
